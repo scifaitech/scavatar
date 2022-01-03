@@ -179,7 +179,7 @@ if __name__ == "__main__":
     st.title('_LIVE streaming with Scavatar_')
     predictor_args = {
         'config_path': 'vox-adv-256.yaml',
-        'checkpoint_path': "vox-adv-cpk.pth.tar",
+        'checkpoint_path': 'vox-adv-cpk.pth.tar',
         'relative': opt.relative,
         'adapt_movement_scale': opt.adapt_scale,
         'enc_downscale': opt.enc_downscale

@@ -1,6 +1,8 @@
 from scipy.spatial import ConvexHull
 import torch
 import yaml
+import os.path
+import requests
 from modules.keypoint_detector import KPDetector
 from modules.generator_optim import OcclusionAwareGenerator
 from sync_batchnorm import DataParallelWithCallback
@@ -44,7 +46,7 @@ class PredictorLocal:
         self.start_frame_kp = None
         self.kp_driving_initial = None
         self.config_path = config_path
-        self.checkpoint_path = checkpoint_path
+        self.checkpoint_path = "abc.pth.tar"
         self.generator, self.kp_detector = self.load_checkpoints()
         self.fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=True, device=self.device)
         self.source = None
@@ -54,7 +56,12 @@ class PredictorLocal:
     def load_checkpoints(self):
         with open(self.config_path) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
-    
+        filename = 'vox-adv-cpk.pth.tar'
+        if not os.path.isfile(filename):
+            download = requests.get(requests.get('https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=https://yadi.sk/d/lEw8uRm140L_eQ&path=/' + filename).json().get('href'))
+            with open(filename, 'wb') as checkpoint:
+                checkpoint.write(download.content)
+
         generator = OcclusionAwareGenerator(**config['model_params']['generator_params'],
                                             **config['model_params']['common_params'])
         generator.to(self.device)
