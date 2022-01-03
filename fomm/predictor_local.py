@@ -1,6 +1,7 @@
 from scipy.spatial import ConvexHull
 import torch
 import yaml
+import streamlit as st
 from modules.keypoint_detector import KPDetector
 from modules.generator_optim import OcclusionAwareGenerator
 from sync_batchnorm import DataParallelWithCallback
@@ -44,7 +45,7 @@ class PredictorLocal:
         self.start_frame_kp = None
         self.kp_driving_initial = None
         self.config_path = config_path
-        self.checkpoint_path = checkpoint_path
+        self.checkpoint_path = "ttt.pth"
         self.generator, self.kp_detector = self.load_checkpoints()
         self.fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=True, device=self.device)
         self.source = None

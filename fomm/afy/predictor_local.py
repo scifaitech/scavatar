@@ -3,6 +3,7 @@ import torch
 import yaml
 import os.path
 import requests
+import streamlit as st
 from modules.keypoint_detector import KPDetector
 from modules.generator_optim import OcclusionAwareGenerator
 from sync_batchnorm import DataParallelWithCallback
@@ -53,6 +54,7 @@ class PredictorLocal:
         self.kp_source = None
         self.enc_downscale = enc_downscale
 
+    @st.cache()
     def load_checkpoints(self):
         with open(self.config_path) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
